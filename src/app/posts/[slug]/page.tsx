@@ -1,7 +1,7 @@
 import Link from "next/link"
 import Image from "next/image"
 import { notFound } from "next/navigation"
-// import { ArrowLeft } from "lucide-react"
+import { ArrowLeft } from "lucide-react"
 import { getSinglePost } from "@/lib/post"
 
 // Helper function to format dates with fixed locale to prevent hydration errors
@@ -21,33 +21,38 @@ function formatDate(dateString: string | null | undefined): string {
 }
 
 interface PageProps {
-  params: { slug: string }
+  params: Promise<{ slug: string }>
 }
 
 export default async function BlogPost({ params }: PageProps) {
-  const { slug } = params
+  const resolvedParams = await params;
+  const { slug } = resolvedParams;
   const post = await getSinglePost(slug)
 
   if (!post) {
     notFound()
   }
 
-  console.log(post)
-
   return (
     <div className="min-h-screen">
       {/* Hero Section with Image Overlay */}
       <div className="relative h-[70vh] min-h-[500px] bg-gray-900">
-        {/* Hero Background Image */}
+        {/* Hero Background */}
         <div className="absolute inset-0">
-          <Image
-            src={post.feature_image || "/placeholder.svg?height=600&width=1200"}
-            alt={post.title || "Blog post feature image"}
-            fill
-            priority
-            className="object-cover"
-          />
-          <div className="absolute inset-0 bg-black bg-opacity-40"></div>
+          {post.feature_image ? (
+            <>
+              <Image
+                src={post.feature_image}
+                alt={post.title || "Blog post feature image"}
+                fill
+                priority
+                className="object-cover"
+              />
+              <div className="absolute inset-0 bg-black opacity-20"></div>
+            </>
+          ) : (
+            <div className="absolute inset-0 bg-gray-800"></div>
+          )}
         </div>
 
         {/* Hero Content */}
@@ -90,23 +95,16 @@ export default async function BlogPost({ params }: PageProps) {
       <div className="max-w-3xl mx-auto px-4 py-16">
         <Link
           href="/"
-          className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors mb-12"
+          className="inline-flex items-center gap-2 mb-12"
         >
-          {/* <ArrowLeft className="w-4 h-4" /> */}
+          <ArrowLeft className="w-4 h-4" />
           Back to Blog
         </Link>
 
         <article
-          className="prose prose-lg prose-gray max-w-none prose-headings:text-gray-900 prose-headings:font-bold prose-p:text-gray-700 prose-p:leading-relaxed prose-p:text-lg prose-li:text-gray-700 prose-li:text-lg prose-img:rounded-lg prose-img:shadow-lg"
+          className="prose dark:prose-invert prose-lg max-w-none prose-headings:font-bold prose-p:leading-relaxed prose-p:text-lg prose-li:text-lg prose-img:rounded-lg prose-img:shadow-lg"
           dangerouslySetInnerHTML={{ __html: post.html || '<p>No content available</p>' }}
         />
-      </div>
-
-      {/* Subscribe Button */}
-      <div className="fixed bottom-6 right-6">
-        <button className="bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-full font-medium shadow-lg transition-colors">
-          Subscribe
-        </button>
       </div>
     </div>
   )

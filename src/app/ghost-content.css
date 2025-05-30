@@ -1,0 +1,195 @@
+
+/* Bookmark Card Container */
+.kg-bookmark-card {
+  width: 100%;
+  margin: 2rem 0;
+  border-radius: 0.5rem; /* Tailwind's rounded-lg */
+  overflow: hidden;
+  background-color: #F7F8FA; /* Light mode background */
+  border: 1px solid #e5e7eb; /* Light mode border - Tailwind gray-200 */
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.07), 0 1px 2px -1px rgba(0, 0, 0, 0.05); /* Subtle shadow */
+}
+
+.kg-bookmark-container {
+  display: flex;
+  text-decoration: none;
+  color: #1f2937; /* Light mode text - Tailwind gray-800 */
+  transition: color 0.2s ease-in-out;
+}
+
+/* Content Area */
+.kg-bookmark-content {
+  flex-grow: 1;
+  padding: 1.25rem; /* p-5 */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* Pushes metadata down if content is short */
+}
+
+.kg-bookmark-title {
+  font-size: 1.125rem; /* text-lg */
+  font-weight: 600; /* font-semibold */
+  margin-bottom: 0.375rem; /* mb-1.5 */
+  color: #111827; /* Light mode title - Tailwind gray-900 */
+  transition: color 0.2s ease-in-out;
+}
+
+.kg-bookmark-description {
+  font-size: 0.875rem; /* text-sm */
+  color: #4b5563; /* Light mode description - Tailwind gray-600 */
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 3; /* Show 3 lines */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-clamp: 3;
+  transition: color 0.2s ease-in-out;
+}
+
+.kg-bookmark-metadata {
+  display: flex;
+  align-items: center;
+  font-size: 0.75rem; /* text-xs */
+  color: #6b7280; /* Light mode metadata - Tailwind gray-500 */
+  margin-top: auto; /* Pushes to bottom if description is short */
+  padding-top: 0.5rem; /* Space above metadata if description is short */
+  transition: color 0.2s ease-in-out;
+}
+
+.kg-bookmark-icon {
+  width: 1rem; /* w-4 */
+  height: 1rem; /* h-4 */
+  margin-right: 0.5rem; /* mr-2 */
+  flex-shrink: 0;
+}
+
+.kg-bookmark-author,
+.kg-bookmark-publisher {
+  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.kg-bookmark-author {
+  margin-right: 0.5rem; /* mr-2 */
+}
+
+.kg-bookmark-author:after {
+  content: "•";
+  margin-left: 0.5rem; /* ml-2 */
+}
+
+/* Thumbnail Area */
+.kg-bookmark-thumbnail {
+  position: relative; /* For absolute positioning of img */
+  width: 33.3333%; /* One-third of the card width */
+  min-width: 10rem; /* Minimum width */
+  max-width: 15rem; /* Maximum width to prevent it from getting too large */
+  flex-shrink: 0; /* Prevent shrinking */
+  height: auto; /* Allow height to be determined by content */
+  align-self: stretch; /* Make sure it stretches to full height of container */
+}
+
+.kg-bookmark-thumbnail img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%; /* Ensures image fills entire parent container */
+  object-fit: cover; /* Fill container, cropping if necessary */
+  border-left: 1px solid #e5e7eb; /* Light mode separator */
+  transition: border-color 0.2s ease-in-out;
+  margin: 0; /* Remove any default margins */
+}
+
+/* Specific styling for SVG images in thumbnails */
+.kg-bookmark-thumbnail img[src$='.svg'] {
+  background-color: #ffffff;
+  padding: 1rem; /* Add some padding around SVGs */
+  object-fit: contain; /* SVGs usually look better with contain */
+}
+
+/* Image Cards (General images in post content, not bookmarks) */
+.kg-image-card {
+  margin: 2rem 0;
+}
+
+.kg-image-card img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* Dark Mode Styles */
+@media (prefers-color-scheme: dark) {
+  .kg-bookmark-card {
+    background-color: #171717; /* Dark mode background - matching your :root variables */
+    border-color: #333333; /* Dark mode border */
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.3), 0 1px 2px -1px rgba(0, 0, 0, 0.2);
+  }
+
+  .kg-bookmark-container {
+    color: #ededed; /* Dark mode text - matching your :root variables */
+  }
+
+  .kg-bookmark-title {
+    color: #ffffff; /* Dark mode title */
+  }
+
+  .kg-bookmark-description {
+    color: #aaaaaa; /* Dark mode description */
+  }
+
+  .kg-bookmark-metadata {
+    color: #888888; /* Dark mode metadata */
+  }
+
+  .kg-bookmark-thumbnail img {
+    border-left-color: #333333; /* Dark mode separator */
+  }
+
+}
+
+/* Responsive Design for smaller screens */
+@media (max-width: 768px) { /* Adjusted breakpoint to md */
+  .kg-bookmark-container {
+    flex-direction: column-reverse; /* Image on top for mobile */
+  }
+
+  .kg-bookmark-thumbnail {
+    width: 100%;
+    height: 12rem; /* Fixed height for thumbnail on mobile */
+    min-width: unset;
+    max-width: unset;
+  }
+
+  .kg-bookmark-thumbnail img {
+    position: absolute; /* Keep absolute positioning */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-left: none; /* No left border when stacked */
+    border-bottom: 1px solid #e5e7eb; /* Separator line on bottom (as image is now on top) */
+  }
+
+  html.dark .kg-bookmark-thumbnail img {
+    border-bottom-color: #374151; /* Dark mode separator on bottom */
+  }
+
+  .kg-bookmark-content {
+    padding: 1rem; /* p-4 on mobile */
+  }
+
+  .kg-bookmark-title {
+    font-size: 1rem; /* text-base on mobile */
+  }
+
+  .kg-bookmark-description {
+    font-size: 0.875rem; /* text-sm on mobile */
+    -webkit-line-clamp: 2; /* Fewer lines on mobile */
+    line-clamp: 2;
+  }
+}
