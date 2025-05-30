@@ -5,18 +5,20 @@ import { notFound } from "next/navigation";
 // Constants
 const EXCERPT_WORD_LIMIT = 45;
 
-// Helper function to format dates
+// Helper function to format dates with fixed locale to prevent hydration errors
 function formatDate(dateString: string | null | undefined): string {
   if (!dateString) {
     return 'No date available';
   }
 
   const date = new Date(dateString);
-  return date.toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
-  });
+
+  const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+  const month = months[date.getUTCMonth()];
+  const day = date.getUTCDate();
+  const year = date.getUTCFullYear();
+
+  return `${month} ${day}, ${year}`;
 }
 
 // Helper function to truncate text with ellipsis
