@@ -1,5 +1,5 @@
 import GhostContentAPI from "@tryghost/content-api";
-import { PostsOrPages } from "@tryghost/content-api";
+import { PostsOrPages, PostOrPage } from "@tryghost/content-api";
 
 // Validate environment variables
 if (!process.env.GHOST_URL) {
@@ -21,6 +21,17 @@ export async function getPosts(): Promise<PostsOrPages | undefined> {
     return await api.posts.browse({
       include: ["tags", "authors"],
       limit: "all"
+    });
+  } catch (err: unknown) {
+    console.error(err);
+    return undefined;
+  }
+}
+
+export async function getSinglePost(postSlug: string): Promise<PostOrPage | undefined> {
+  try {
+    return await api.posts.read({
+      slug: postSlug
     });
   } catch (err: unknown) {
     console.error(err);
