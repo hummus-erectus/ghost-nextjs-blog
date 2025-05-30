@@ -19,6 +19,7 @@ const api = new GhostContentAPI({
 export async function getPosts(): Promise<PostsOrPages | undefined> {
   try {
     return await api.posts.browse({
+      include: ["tags", "authors"],
       limit: "all"
     });
   } catch (err: unknown) {
